@@ -823,19 +823,30 @@ document.addEventListener('DOMContentLoaded', () => {
     async function shareScore() {
         if (!shareableScoreText) return;
 
+        const winModalContent = winModal.querySelector('.modal-content');
+        const linkToShare = "https://sasy1991.github.io/memory/"; // This is your placeholder link
+
         try {
-            if (navigator.share) {
-                await navigator.share({
-                    title: 'Memory Fun! Score',
-                    text: shareableScoreText
-                });
+            const canvas = await html2canvas(winModalContent, { scale: 2, backgroundColor: null });
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+
+            if (!blob) throw new Error('Canvas to Blob conversion failed');
+
+            const file = new File([blob], 'score.png', { type: 'image/png' });
+            const shareData = { files: [file], title: 'Memory Fun! Score', text: shareableScoreText, url: linkToShare };
+
+            // Check if we can share files
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share(shareData);
             } else {
-                await navigator.clipboard.writeText(shareableScoreText);
+                // Fallback for browsers that can't share files (e.g., desktop)
+                await navigator.clipboard.writeText(`${shareableScoreText}\n\nPlay here: ${linkToShare}`);
                 showToast('Score copied to clipboard!');
             }
         } catch (error) {
-            console.error('Error sharing score:', error);
-            showToast('Could not share score.');
+            console.error('Error sharing score with image:', error);
+            await navigator.clipboard.writeText(`${shareableScoreText}\n\nPlay here: ${linkToShare}`);
+            showToast('Image sharing not supported. Score copied to clipboard!');
         }
     }
 
