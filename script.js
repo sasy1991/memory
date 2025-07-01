@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const winStarsElement = document.getElementById('win-stars');
     const pauseModal = document.getElementById('pause-modal');
     const categorySelection = document.getElementById('category-selection');
+    const howToPlayButton = document.getElementById('how-to-play-button');
+    const tutorialModal = document.getElementById('tutorial-modal');
+    const closeTutorialButton = document.getElementById('close-tutorial-button');
     const dailyChallengeButton = document.getElementById('daily-challenge-button');
     const achievementsButton = document.getElementById('achievements-button');
     const achievementsModal = document.getElementById('achievements-modal');
@@ -273,6 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isDailyChallengeMode = false;
         gameHeader.querySelector('h1').textContent = 'Memory Fun!'; // Reset header
         achievementsModal.classList.remove('visible');
+        tutorialModal.classList.remove('visible');
         pauseModal.classList.remove('visible');
         clearInterval(timerInterval);
         if (timerSpan) timerSpan.textContent = '00:00';
@@ -837,6 +841,8 @@ document.addEventListener('DOMContentLoaded', () => {
     pauseButton.addEventListener('click', pauseGame);
     resumeButton.addEventListener('click', resumeGame);
     playAgainButton.addEventListener('click', showCategoryScreen);
+    howToPlayButton.addEventListener('click', () => tutorialModal.classList.add('visible'));
+    closeTutorialButton.addEventListener('click', () => tutorialModal.classList.remove('visible'));
     shareButton.addEventListener('click', shareScore);
     dailyChallengeButton.addEventListener('click', handleDailyChallengeClick);
     achievementsButton.addEventListener('click', showAchievementsModal);
