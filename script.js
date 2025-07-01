@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const winStarsElement = document.getElementById('win-stars');
     const pauseModal = document.getElementById('pause-modal');
     const categorySelection = document.getElementById('category-selection');
+    const playerLevelSpan = document.getElementById('player-level');
+    const xpBar = document.getElementById('xp-bar');
+    const xpText = document.getElementById('xp-text');
     const howToPlayButton = document.getElementById('how-to-play-button');
     const tutorialModal = document.getElementById('tutorial-modal');
     const closeTutorialButton = document.getElementById('close-tutorial-button');
@@ -52,6 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let isPaused = false;
     let timeElapsedBeforePause = 0;
     let currentDifficulty = 'easy';
+    let playerLevel = 1;
+    let playerXP = 0;
+    let xpToNextLevel = 100;
+    const XP_PER_MATCH = 10;
+    const XP_WIN_BONUS = { 1: 50, 2: 100, 3: 150 };
     let shareableScoreText = '';
     let isDailyChallengeMode = false;
     // Thresholds are the maximum number of moves to get the star rating
@@ -149,6 +157,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return false;
     }
+
+    // --- PLAYER STATS & XP ---
+    function calculateXPForLevel(level) {
+        // Simple scaling: 100 XP for level 1, 120 for 2, 140 for 3, etc.
+        return 100 + (level - 1) * 20;
+    }
+
+    function loadPlayerStats() {
+        playerLevel = parseInt(localStorage.getItem('playerLevel') || '1', 10);
+        playerXP = parseInt(localStorage.getItem('playerXP') || '0', 10);
+        xpToNextLevel = calculateXPForLevel(playerLevel);
+    }
+
+    function savePlayerStats() {
+        localStorage.setItem('playerLevel', playerLevel);
+        localStorage.setItem('playerXP', playerXP);
+    }
+
+    function addXP(amount) {
+        playerXP += amount;
+        while (playerXP >= xpToNextLevel) {
+            playerXP -= xpToNextLevel;
+            playerLevel++;
+            xpToNextLevel = calculateXPForLevel(playerLevel);
+            showToast(`🎉 Level Up! You are now Level ${playerLevel}!`);
+        }
+        updatePlayerStatsUI();
+        savePlayerStats();
+    }
+
+    function updatePlayerStatsUI() {
+        if (!playerLevelSpan || !xpBar || !xpText) return;
+
+        playerLevelSpan.textContent = playerLevel;
+        xpText.textContent = `${playerXP} / ${xpToNextLevel} XP`;
+
+        const xpPercentage = (playerXP / xpToNextLevel) * 100;
+        xpBar.style.width = `${xpPercentage}%`;
+    }
+
 
     // --- DAILY CHALLENGE HELPERS ---
     function getTodaysDateString() {
@@ -622,6 +670,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playSound(matchSound);
         firstCard.removeEventListener('click', flipCard);
         secondCard.removeEventListener('click', flipCard);
+        addXP(XP_PER_MATCH);
         matchedPairs++;
 
         if (isSpecial) {
@@ -732,6 +781,7 @@ document.addEventListener('DOMContentLoaded', () => {
             starRating = 1;
         }
         displayStars(starRating);
+        addXP(XP_WIN_BONUS[starRating] || 50);
 
         // --- Create Shareable Text ---
         const starsText = '★'.repeat(starRating) + '☆'.repeat(3 - starRating);
@@ -882,10 +932,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- APP START ---
     function startApp() {
+        loadPlayerStats();
         loadAchievements();
         categoryLoader.classList.remove('hidden');
         categoryContainer.classList.add('hidden');
         showCategoryScreen();
+        updatePlayerStatsUI();
         fetchAndDisplayCategories();
     }
 
