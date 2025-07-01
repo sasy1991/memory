@@ -733,11 +733,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         displayStars(starRating);
 
+        // --- Create Shareable Text ---
+        const starsText = '★'.repeat(starRating) + '☆'.repeat(3 - starRating);
+        const gameModeText = isDailyChallengeMode ? "Today's Daily Challenge" : `Category: ${currentCategoryName}`;
+        const difficultyText = currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1);
+        const formattedTime = formatTime(elapsedTime);
+        shareableScoreText = `I just played Memory Fun! 🧠\n\n${gameModeText}\nDifficulty: ${difficultyText}\nScore: ${starsText}\nTime: ${formattedTime}\nMoves: ${moves}\n\nCan you beat my score?`;
+
         // --- Check Achievements ---
         checkWinAchievements(elapsedTime, starRating);
 
         const finalTimeInSeconds = Math.floor(elapsedTime / 1000);
-        const formattedTime = formatTime(elapsedTime);
+
         winTimeElement.textContent = `Your time: ${formattedTime}`;
 
         if (isDailyChallengeMode) {
