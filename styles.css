@@ -675,3 +675,33 @@ option.child-category {
         /* 5% of the viewport height */
     }
 }
+
+/* --- RTL Specific Styles --- */
+[dir="rtl"] #achievements-list,
+[dir="rtl"] .tutorial-content {
+    text-align: right;
+}
+
+[dir="rtl"] #achievements-list {
+    padding-left: 1rem;
+    padding-right: 0;
+}
+
+[dir="rtl"] option.child-category {
+    padding-left: 0;
+    padding-right: 1.5rem;
+}
+
+[dir="rtl"] #toast-container {
+    right: auto;
+    left: 20px;
+}
+
+[dir="rtl"] #how-to-play-button {
+    right: auto;
+    left: 1.5rem;
+}
+
+[dir="rtl"] #how-to-play-button:hover {
+    transform: scale(1.1) rotate(-15deg);
+}
