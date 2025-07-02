@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משחק זיכרון לילדים</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <button id="how-to-play-button" aria-label="איך משחקים">
+        <!-- same SVG icon -->
+    </button>
+
+    <section id="category-selection">
+        <div id="player-stats">
+            <div class="level-display">
+                <span>רמה</span>
+                <span id="player-level">1</span>
+            </div>
+            <div class="xp-bar-container">
+                <div id="xp-bar" class="xp-bar"></div>
+                <span id="xp-text">0 / 100 נקודות ניסיון</span>
+            </div>
+        </div>
+        <h2>בחר קטגוריה</h2>
+        <div id="category-loader" class="loader-container">
+            <div class="loader"></div>
+            <p class="loader-text">טוען קטגוריות...</p>
+        </div>
+        <div class="category-container hidden">
+            <select id="category-dropdown" aria-label="רשימת קטגוריות"></select>
+            <div id="difficulty-selection">
+                <button class="difficulty-btn active" data-difficulty="easy">קל (4x4)</button>
+                <button class="difficulty-btn" data-difficulty="medium">בינוני (5x4)</button>
+                <button class="difficulty-btn" data-difficulty="hard">קשה (6x6)</button>
+            </div>
+            <button id="daily-challenge-button">🏆 אתגר יומי</button>
+            <button id="achievements-button">הישגים</button>
+            <button id="start-game-button" disabled>התחל משחק</button>
+        </div>
+    </section>
+
+    <header class="hidden">
+        <h1>כיף זיכרון!</h1>
+        <p>מהלכים: <span id="moves-count">0</span></p>
+        <p>זמן: <span id="timer">00:00</span></p>
+        <div class="header-buttons">
+            <button id="restart-button">התחל מחדש</button>
+            <button id="pause-button">השהה</button>
+            <button id="hint-button">
+                <!-- same SVG icon -->
+                <span>רמז</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="game-container hidden">
+        <section class="memory-game"></section>
+    </main>
+
+    <div id="win-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>ניצחת!</h2>
+            <div id="win-stars"></div>
+            <p>עבודה נהדרת! מצאת את כל הזוגות!</p>
+            <p id="win-time"></p>
+            <p id="best-time"></p>
+            <div class="win-modal-buttons">
+                <button id="play-again-button">שחק שוב</button>
+                <button id="share-button">שתף ניקוד</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pause-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>המשחק בהשהיה</h2>
+            <button id="resume-button">המשך</button>
+        </div>
+    </div>
+
+    <div id="achievements-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>הישגים</h2>
+            <div id="achievements-list"></div>
+            <button id="close-achievements-button">סגור</button>
+        </div>
+    </div>
+
+    <div id="tutorial-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>איך משחקים</h2>
+            <div class="tutorial-content">
+                <div class="tutorial-section">
+                    <h3>המטרה</h3>
+                    <p>התאם את כל זוגות הקלפים כדי לנקות את הלוח כמה שיותר מהר!</p>
+                </div>
+                <div class="tutorial-section">
+                    <h3>קלפים מיוחדים (בינוני/קשה)</h3>
+                    <p><strong>👁️ קלף הצצה:</strong> התאמה של אלו חושפת את כל הקלפים לזמן קצר.</p>
+                    <p><strong>💡 קלף רמז נוסף:</strong> התאמה של אלו נותנת לך רמז נוסף.</p>
+                </div>
+            </div>
+            <button id="close-tutorial-button">הבנתי!</button>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <!-- Sound Effects -->
+    <audio id="flip-sound" src="https://coloringjungle.com/wp-content/uploads/2025/05/click.mp3" preload="auto"></audio>
+    <audio id="match-sound" src="https://coloringjungle.com/wp-content/uploads/2025/05/bubble-pop.mp3"
+        preload="auto"></audio>
+    <audio id="win-sound" src="https://coloringjungle.com/wp-content/uploads/2025/05/success-fanfare-trumpets-6185.mp3"
+        preload="auto"></audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="heb-script.js"></script>
+</body>
+
+</html>
