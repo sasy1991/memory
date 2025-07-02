@@ -806,6 +806,7 @@ document.addEventListener('DOMContentLoaded', () => {
             bestTimeElement.textContent = `Today's Best: ${formatTime(dailyBestTime * 1000)}`;
         } else {
             const isNewRecord = saveBestTime(currentCategoryId, currentDifficulty, finalTimeInSeconds);
+            saveStarRating(currentCategoryId, currentDifficulty, starRating);
             const bestTimeInSeconds = getBestTime(currentCategoryId, currentDifficulty);
             if (isNewRecord) {
                 bestTimeElement.innerHTML = `✨ New Best Time! ✨`;
